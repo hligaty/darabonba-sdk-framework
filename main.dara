@@ -1,0 +1,157 @@
+import Util;
+import OpenApiUtil;
+
+type @endpoint_host = string
+type @appKey = string
+type @secretKey = string
+type @timeout = number
+
+type @pathNamePrefix = string
+type @successCode = number
+
+type @post = string
+type @get = string
+type @query_string = number
+type @url_path = number
+type @application_json = number
+
+model Config {
+  endpoint: string,
+  appKey: string,
+  secretKey: string,
+  timeout: number
+}
+
+init(config: Config) {
+  Util.validateModel(config);
+  @endpoint_host = config.endpoint;
+  @appKey = config.appKey;
+  @secretKey = config.secretKey;
+  @timeout = config.timeout;
+
+  @pathNamePrefix = "/api";
+  @successCode = 200;
+
+  @post = 'POST';
+  @get = 'GET';
+
+  @query_string = 0;
+  @url_path = 1;
+  @application_json = 2;
+}
+
+model Request {
+  method: string(description = "method"),
+  pathname: string(description = "path"),
+  type?: number(description = "Data transmission form"),
+  param?: string(description = "String waiting for signature")
+}
+
+model ResponseBody {
+  code: number(description = "code"),
+  msg: string(description = "msg"),
+  data: any(description = "data")
+}
+
+async function requestRObj(request: Request, data: any): object {
+  return Util.assertAsMap(requestRAny(request, data));
+}
+
+api requestRAny(request: Request, data: any): any {
+  __request.method = request.method;
+  __request.pathname = request.pathname;
+  var date: string = OpenApiUtil.getTimestamp();
+  __request.headers = {
+    host = @endpoint_host,
+    app_key = @appKey,
+    signed_at = date,
+    sign = OpenApiUtil.hexEncode(OpenApiUtil.hash(Util.toBytes(`${@secretKey}${@appKey}${date}${data}${@secretKey}`), "ACS3-RSA-SHA256"))
+  };
+  if (Util.equalNumber(request.type, @query_string)) {
+    __request.query = Util.stringifyMapValue(Util.assertAsMap(data));
+  } else if (Util.equalNumber(request.type, @application_json)) {
+    __request.headers.accept = 'application/json';
+    __request.body = Util.toJSONString(data);
+  } else if (Util.equalNumber(request.type, @url_path)) {
+    __request.pathname = `${request.pathname}${Util.assertAsString(data)}`;
+  }
+} returns {
+  var responseBody = Util.assertAsMap(Util.readAsJSON(__response.body));
+  if (!Util.equalNumber(__response.statusCode, 200) || !Util.equalNumber(Util.assertAsNumber(responseBody.code), @successCode)) {
+      throw {
+          code = `${responseBody.code}`,
+          message = `httpCode: ${__response.statusCode}, bizCode: ${responseBody.code}, reason: ${responseBody.msg}`
+      };
+  }
+  return responseBody.data;
+} runtime {
+  timeout = @timeout
+}
+
+
+// Sample start
+
+model CreateUserRequest {
+  accid?: string(description = "user unique id"),
+  name?: string(description = "nickname")
+}
+
+/**
+ * create user, return token
+ */
+async function createUser(createUserRequest: CreateUserRequest): string {
+  var request = new Request {
+    method = @post,
+    pathname = `${@pathNamePrefix}/user`,
+    param = `accid${createUserRequest.accid}name${createUserRequest.name}`,
+    type = @application_json
+  };
+  return Util.assertAsString(requestRAny(request, createUserRequest));
+}
+
+model ListUserResponse {
+  items?: [ ListUserItemResponse ](description = "user info array")
+}
+
+model ListUserItemResponse {
+  accid?: string(description = "user id"),
+  name?: string(description = "nickname")
+}
+
+/**
+ * batch query user
+ */
+async function listUser(accids: [ string ]): ListUserResponse {
+  var accidsString: string = OpenApiUtil.arrayToStringWithSpecifiedStyle(accids, null, "simple");
+  var request = new Request {
+    method = @get,
+    pathname = `${@pathNamePrefix}/user`,
+    param = `accids${accidsString}`,
+    type = @query_string
+  };
+  return {
+    items = requestRAny(request, {
+      accids = accids
+    })
+  };
+}
+
+model ListOnlineUserRequest {
+  currentPage?: number(description = "cuerrent page number"),
+  size?: number(description = "page size")
+}
+
+model ListOnlineUserResponse {
+  totalPage?: number(description = "total page number"),
+  items: [ string ](description = "items")
+}
+
+async function listOnlineUser(listOnlineUserRequest: ListOnlineUserRequest): ListOnlineUserResponse {
+  var request = new Request {
+    method = @get,
+    pathname = `${@pathNamePrefix}/onlineuser`,
+    param = `currentPage${listOnlineUserRequest.currentPage}size${listOnlineUserRequest.size}`,
+    type = @url_path
+  };
+  return requestRObj(request, `/${listOnlineUserRequest.currentPage}/${listOnlineUserRequest.size}`);
+}

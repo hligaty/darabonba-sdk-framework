@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Darabonba ###
+ts/
+go/
+csharp/
+java/
+php/
+python/
+python2/
+cpp/
+swift/
+libraries/
