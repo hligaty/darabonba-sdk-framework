@@ -33,13 +33,14 @@ build/
 .vscode/
 
 ### Darabonba ###
-ts/
-go/
-csharp/
-java/
-php/
-python/
-python2/
-cpp/
-swift/
-libraries/
+**/ts/
+**/go/
+**/csharp/
+**/java/
+**/php/
+**/python/
+**/python2/
+**/cpp/
+**/swift/
+**/libraries/
+sdk/.libraries.json

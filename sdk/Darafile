@@ -1,0 +1,39 @@
+{
+  "scope": "hligaty",
+  "name": "SDK",
+  "version": "0.0.1",
+  "main": "./main.dara",
+  "libraries": {
+    "Util": "darabonba:Util",
+    "OpenApiUtil": "alibabacloud:OpenApiUtil"
+  },
+  "releases": {
+    "java": "io.github.hligaty:sdk:0.0.1",
+    "php": "hligaty/sdk:^0.0.1",
+    "go": "io.github.hligaty/sdk:v0.0.1",
+    "python": "hligaty_sdk:0.0.1",
+    "ts": "@hligaty/sdk:^0.0.1",
+    "csharp": "Hligaty.SDK:0.0.1"
+  },
+  "java": {
+    "package": "io.github.hligaty",
+    "packageInfo": {
+      "groupId": "io.github.hligaty",
+      "artifactId": "sdk",
+      "version": "0.0.1",
+      "description": "SDK for Java"
+    }
+  },
+  "python": {
+    "package": "hligaty_sdk"
+  },
+  "python2": {
+    "package": "hligaty_sdk_py2"
+  },
+  "php": {
+    "package": "Hligaty.SDK"
+  },
+  "csharp": {
+    "namespace": "Hligaty.SDK"
+  }
+}
