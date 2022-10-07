@@ -33,8 +33,6 @@ A generated Darabonba SDK Template repository contains the following content str
 
 ```
 .
-├── .github/                GitHub Actions workflows and Dependabot configuration files
-├── .run/                   Predefined Run/Debug Configurations
 ├── sample                  CodeSample sources
 │   ├── .libraries.json     Dependency system path
 │   ├── Darafile/           Darabonba configuration file
