@@ -2,9 +2,9 @@
 
 > **Note**
 >
-> Click the <kbd>Use this template</kbd> button and clone it in Local.
+> Click the <kbd>Use this template</kbd> button and clone it in local.
 
-Darabonba SDK Template is a repository that provides a pure template to make it easier to create a Multilingual SDK project
+Darabonba SDK Template is a repository that provides a pure template to make it easier to create a Multilingual SDK project.
 
 ## Quick start
 
@@ -23,9 +23,9 @@ $ dara install alibabacloud:OpenApiUtil -S
 
 ## Darabonba configuration
 
-1. Read [Darafile guide](https://github.com/aliyun/darabonba/blob/master/doc/darafile.md)
-2. Change `scope`|`name`|`package`|`namespace` in both `Darafile` files,
-3. Modify the `hligaty:SDK` of `sample/.libraries.json` to the `scope:name` configured in `SDK/Darafile`
+1. Read [Darafile guide](https://github.com/aliyun/darabonba/blob/master/doc/darafile.md).
+2. Change `scope`|`name`|`package`|`namespace` in both `Darafile` files.
+3. Modify the `hligaty:SDK` of `sample/.libraries.json` to the `scope:name` configured in `SDK/Darafile`.
 
 ## SDK template structure
 
@@ -33,8 +33,6 @@ A generated Darabonba SDK Template repository contains the following content str
 
 ```
 .
-├── .github/                GitHub Actions workflows and Dependabot configuration files
-├── .run/                   Predefined Run/Debug Configurations
 ├── sample                  CodeSample sources
 │   ├── .libraries.json     Dependency system path
 │   ├── Darafile/           Darabonba configuration file
