@@ -44,7 +44,7 @@ model Request {
   method: string(description = "method"),
   pathname: string(description = "path"),
   type?: number(description = "Data transmission form"),
-  param?: string(description = "String waiting for signature")
+  signString?: string(description = "String waiting for signature")
 }
 
 model ResponseBody {
@@ -65,7 +65,7 @@ api requestRAny(request: Request, data: any): any {
     host = @endpoint_host,
     app_key = @appKey,
     signed_at = date,
-    sign = OpenApiUtil.hexEncode(OpenApiUtil.hash(Util.toBytes(`${@secretKey}${@appKey}${date}${data}${@secretKey}`), "ACS3-RSA-SHA256"))
+    sign = OpenApiUtil.hexEncode(OpenApiUtil.hash(Util.toBytes(`${@secretKey}${@appKey}${date}${request.signString}${@secretKey}`), "ACS3-RSA-SHA256"))
   };
   if (Util.equalNumber(request.type, @query_string)) {
     __request.query = Util.stringifyMapValue(Util.assertAsMap(data));
@@ -88,6 +88,14 @@ api requestRAny(request: Request, data: any): any {
   timeout = @timeout
 }
 
+function appendSignParam(paramName: string, paramValue: any): string {
+  if (Util.isUnset(paramValue)) {
+    return "";
+  } else {
+    return `${paramName}${paramValue}`;
+  }
+}
+
 
 // Sample start
 
@@ -103,7 +111,7 @@ async function createUser(createUserRequest: CreateUserRequest): string {
   var request = new Request {
     method = @post,
     pathname = `${@pathNamePrefix}/user`,
-    param = `accid${createUserRequest.accid}name${createUserRequest.name}`,
+    signString = `${appendSignParam("accid", createUserRequest.accid)}${appendSignParam("name", createUserRequest.name)}`,
     type = @application_json
   };
   return Util.assertAsString(requestRAny(request, createUserRequest));
@@ -126,7 +134,7 @@ async function listUser(accids: [ string ]): ListUserResponse {
   var request = new Request {
     method = @get,
     pathname = `${@pathNamePrefix}/user`,
-    param = `accids${accidsString}`,
+    signString = `${appendSignParam("accids", accidsString)}`,
     type = @query_string
   };
   return {
@@ -150,7 +158,7 @@ async function listOnlineUser(listOnlineUserRequest: ListOnlineUserRequest): Lis
   var request = new Request {
     method = @get,
     pathname = `${@pathNamePrefix}/onlineuser`,
-    param = `currentPage${listOnlineUserRequest.currentPage}size${listOnlineUserRequest.size}`,
+    signString = `${appendSignParam("currentPage", listOnlineUserRequest.currentPage)}${appendSignParam("size", listOnlineUserRequest.size)}`,
     type = @url_path
   };
   return requestRObj(request, `/${listOnlineUserRequest.currentPage}/${listOnlineUserRequest.size}`);
