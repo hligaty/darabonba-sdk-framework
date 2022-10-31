@@ -10,7 +10,15 @@ jobs:
         run: npm install -g @darabonba/cli
 
       - name: darabonba-Util install
-        run: dara install darabonba:Util -S
+        run: |
+          cd sample
+          dara install darabonba:Util -S
+          cd ../sdk
+          dara install darabonba:Util -S
         
       - name: alibabacloud-OpenApiUtil install
-        run: dara install alibabacloud:OpenApiUtil -S
+        run: |
+          cd sample
+          dara install alibabacloud:OpenApiUtil -S
+          cd ../sdk
+          dara install alibabacloud:OpenApiUtil -S
