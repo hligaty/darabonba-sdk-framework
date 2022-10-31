@@ -1,0 +1,16 @@
+name: Build
+on: [fork]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: npm install
+        run: npm install -g @darabonba/cli
+
+      - name: darabonba-Util install
+        run: dara install darabonba:Util -S
+        
+      - name: alibabacloud-OpenApiUtil install
+        run: dara install alibabacloud:OpenApiUtil -S
