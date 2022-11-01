@@ -1,5 +1,5 @@
 name: Release
-on: [ prereleased, released ]
+on: [ released ]
 jobs:
   build:
     name: Release
