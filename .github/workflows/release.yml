@@ -55,8 +55,11 @@ jobs:
             .gitignore \
             LICENSE \
             README.md
+          
+      - name: Zip
+        run: zip -r ${{ secrets.ReleaseZipName }} ./*
 
       - name: Upload
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.event.release.tag_name }} ./*
+        run: gh release upload ${{ github.event.release.tag_name }} ${{ secrets.ReleaseZipName }}
