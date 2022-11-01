@@ -57,9 +57,9 @@ jobs:
             README.md
           
       - name: Zip
-        run: zip -r ${{ secrets.ReleaseZipName }} ./*
+        run: zip -r DevKit.zip ./*
 
       - name: Upload
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.event.release.tag_name }} ${{ secrets.ReleaseZipName }}
+        run: gh release upload ${{ github.event.release.tag_name }} DevKit.zip
