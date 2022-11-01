@@ -1,0 +1,60 @@
+name: Release
+on: [ prereleased, released ]
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - name: Npm Install
+        run: npm install -g @darabonba/cli
+
+      - name: Sdk Build
+        working-directory: ./sdk
+        run: |
+          dara install darabonba:Util -S
+          dara install alibabacloud:OpenApiUtil -S
+          dara codegen java ./java
+          dara codegen csharp ./csharp
+          dara codegen python ./python
+          dara codegen go ./go
+          dara codegen php ./php
+          dara codegen ts ./ts
+
+
+      - name: Sample Build
+        working-directory: ./sample
+        run: |
+          dara install darabonba:Util -S
+          dara install alibabacloud:OpenApiUtil -S
+          dara codegen java ./java
+          dara codegen csharp ./csharp
+          dara codegen python ./python
+          dara codegen go ./go
+          dara codegen php ./php
+          dara codegen ts ./ts
+
+      - name: Cleanup
+        working-directory: ./
+        run: |
+          rm -rf \
+            .github \
+            sdk/libraries \
+            sdk/.libraries.json \
+            sdk/Darafile \
+            sdk/main.dara \
+            sample/libraries \
+            sample/.libraries.json \
+            sample/Darafile \
+            sample/main.dara \
+            .gitignore \
+            LICENSE \
+            README.md
+
+      - name: Upload
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.event.release.tag_name }} ./*
