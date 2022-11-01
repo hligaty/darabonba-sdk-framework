@@ -22,6 +22,7 @@ jobs:
           dara codegen java ./java
           dara codegen csharp ./csharp
           dara codegen python ./python
+          dara codegen python2 ./python2
           dara codegen go ./go
           dara codegen php ./php
           dara codegen ts ./ts
@@ -35,6 +36,7 @@ jobs:
           dara codegen java ./java
           dara codegen csharp ./csharp
           dara codegen python ./python
+          dara codegen python2 ./python2
           dara codegen go ./go
           dara codegen php ./php
           dara codegen ts ./ts
