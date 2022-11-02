@@ -27,6 +27,10 @@ $ dara install alibabacloud:OpenApiUtil -S
 2. Change `scope`|`name`|`package`|`namespace` in both `Darafile` files.
 3. Modify the `hligaty:SDK` of `sample/.libraries.json` to the `scope:name` configured in `SDK/Darafile`.
 
+## Release development kit
+
+The repository integrates github workflow. When a version is released, [release.yml](.github/workflows/release.yml) will be executed to automatically build the development kit into the released version
+
 ## SDK template structure
 
 A generated Darabonba SDK Template repository contains the following content structure:
