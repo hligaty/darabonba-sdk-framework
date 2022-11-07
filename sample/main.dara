@@ -9,7 +9,7 @@ static async function main(args: [ string ]) throws : void {
 
 static function createClient(): SDK {
     var config = new SDK.Config{};
-    config.endpoint = "localhost:80";
+    config.endpoint = "localhost:80/v1";
     config.appKey = "123456";
     config.secretKey = "123456";
     config.timeout = 6;
