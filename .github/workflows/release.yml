@@ -31,6 +31,7 @@ jobs:
       - name: Sample Build
         working-directory: ./sample
         run: |
+          cp -R ../sdk/libraries/ ./
           dara install darabonba:Util -S
           dara install alibabacloud:OpenApiUtil -S
           dara codegen java ./java
