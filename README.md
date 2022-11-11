@@ -39,11 +39,11 @@ A generated Darabonba SDK Template repository contains the following content str
 .
 ├── sample                  CodeSample sources
 │   ├── .libraries.json     Dependency system path
-│   ├── Darafile/           Darabonba configuration file
-│   └── main.dara/          Darabonba production sources
+│   ├── Darafile            Darabonba configuration file
+│   └── main.dara           Darabonba production sources
 ├── sdk                     SDK sources
-│   ├── Darafile/           Darabonba configuration file
-│   └── main.dara/          Darabonba production sources
+│   ├── Darafile            Darabonba configuration file
+│   └── main.dara           Darabonba production sources
 ├── .gitignore              Git ignoring rules
 ├── LICENSE                 License, MIT by default
 └── README.md               README
